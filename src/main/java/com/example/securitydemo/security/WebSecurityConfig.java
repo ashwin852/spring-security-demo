@@ -12,11 +12,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.example.securitydemo.security.jwt.AuthEntryPointJwt;
 import com.example.securitydemo.security.jwt.AuthTokenFilter;
 import com.example.securitydemo.security.services.UserDetailsServiceImpl;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
