@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +30,7 @@ import com.example.securitydemo.payload.response.JwtResponse;
 import com.example.securitydemo.payload.response.MessageResponse;
 import com.example.securitydemo.repository.RoleRepository;
 import com.example.securitydemo.repository.UserRepository;
+import com.example.securitydemo.security.jwt.AuthEntryPointJwt;
 import com.example.securitydemo.security.jwt.JwtUtils;
 import com.example.securitydemo.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -56,6 +60,8 @@ public class AuthController {
 	
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 	
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -98,10 +104,11 @@ public class AuthController {
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 		
-		if (strRoles == null) {
+		if (strRoles.isEmpty()) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 			roles.add(userRole);
+			
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
